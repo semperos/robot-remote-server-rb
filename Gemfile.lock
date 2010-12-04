@@ -1,0 +1,16 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    echoe (4.3.1)
+      gemcutter
+      rubyforge
+    gemcutter (0.6.1)
+    json_pure (1.4.6)
+    rubyforge (2.0.4)
+      json_pure (>= 1.1.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  echoe
