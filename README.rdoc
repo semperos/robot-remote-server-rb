@@ -10,3 +10,17 @@ Per its official documentation, "Robot Framework is a generic keyword-driven tes
 * Test libraries can be implemented using any language that supports XML-RPC protocol. Robot Framework currently contains generic remote servers for Python/Jython and Ruby, and the plan is to implement generic servers for other languages like Java and Perl in the future.
 
 For the purposes of using RobotFramework's remote library to leverage Watir web testing, this project is most concerned with the latter feature.
+
+== Installation
+
+As stated above, I don't want to release this as an "official" gem on RubyGems. For that reason, if you want to install this code as a gem, you can either use the <tt>gem</tt> command manually:
+
+    gem build robot_remote_server
+    gem install robot_remote_server-{version}.gem
+
+Or you can install the project's dependencies (run <tt>bundle install</tt>) and use the rake tasks defined by the Echoe gem:
+
+    rake build
+    rake install
+
+
