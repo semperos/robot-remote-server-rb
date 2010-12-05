@@ -1,6 +1,6 @@
 = Robot Remote Server for the Robot Framework in Ruby
 
-This is a Ruby gem for the Ruby implementation of RobotRemoteServer that comes with RobotFramework.
+This is a Ruby gem for the Ruby implementation of RobotRemoteServer that comes with Robot Framework.
 
 == Overview
 
@@ -15,7 +15,6 @@ The simplest method of installation is to install the gem directly from Rubygems
 
     gem install robot_remote_server
 
-If at some point this project is taken on by Robot Framework and they supply their own gem, that gem will be taken down from Rubygems.org. In that event, if you still want the code for this project hosted on Github, follow the following instructions.
 
 If you want to build the gem manually with the <tt>gem</tt> command:
 
@@ -26,3 +25,27 @@ If you want a simpler interface, install the <tt>echoe</tt> gem (or just run thi
 
     rake build
     rake install
+
+== Usage
+
+For information on the Remote Library interface in Robot Framework, read the following from the official Robot Framework wiki: http://code.google.com/p/robotframework/wiki/RemoteLibrary
+
+This gem provides a remote server implemented in Ruby, which allows you to write your own testing library (i.e. your own keywords) using Ruby and Ruby libraries.
+
+In your test library, you need to include the gem:
+
+    require 'robot_remote_server'
+
+Then you'll have the RobotRemoteServer class available to your code. For example, if your test library was defined in a class called <tt>ExampleTestLibrary</tt>, here's how you'd start the <tt>robot_remote_server</tt> server and feed it your test library from IRB:
+
+    require 'robot_remote_server'
+    RobotRemoteServer.new(ExampleTestLibrary.new)
+
+Per the example in Robot Framework itself, you could include that in a file as follows:
+
+    if __FILE__ == $0
+      require 'robot_remote_server'
+      RobotRemoteServer.new(ExampleTestLibrary.new, *ARGV)
+    end
+
+Once you have the remote server running with your new test library, you can run your Robot Framework tests and have your test library's keywords available per usual.
