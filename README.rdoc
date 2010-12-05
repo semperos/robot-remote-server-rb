@@ -16,12 +16,12 @@ The simplest method of installation is to install the gem directly from Rubygems
     gem install robot_remote_server
 
 
-If you want to build the gem manually with the <tt>gem</tt> command:
+If you want to hack on the remote server directly and then build your own gem, you can do so with the <tt>gem</tt> command:
 
     gem build robot_remote_server
     gem install robot_remote_server-{version}.gem
 
-If you want a simpler interface, install the <tt>echoe</tt> gem (or just run this projects Gemfile with <tt>bundle install</tt>) and execute the following:
+Or by installing this project's dependencies and using the following rake tasks:
 
     rake build
     rake install
