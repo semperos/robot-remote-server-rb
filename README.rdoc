@@ -2,6 +2,8 @@
 
 This is a Ruby gem for the Ruby implementation of RobotRemoteServer that comes with Robot Framework.
 
+This gem is compatible with Robot Framework versions 2.5.4-2.5.5. I will bump the gem version (currently at 2.5.4) as soon as possible.
+
 == Overview
 
 Per its official documentation, "Robot Framework is a generic keyword-driven test automation framework." Natively, it supports testing libraries in Python and Java. However, Robot Framework also provides a "Remote Library" which allows for two things (again, per the official documentation):
