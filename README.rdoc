@@ -2,7 +2,7 @@
 
 This is a Ruby gem for the Ruby implementation of RobotRemoteServer that comes with Robot Framework.
 
-This gem is compatible with Robot Framework versions 2.5.4-2.5.5. I will bump the gem version (currently at 2.5.4) as soon as possible.
+This gem is compatible with Robot Framework versions 2.1 and later. For earlier versions, you will need to include the Remote Library explicitly, but it should be compatible in that scenario as well.
 
 == Overview
 
