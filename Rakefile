@@ -8,4 +8,5 @@ Echoe.new('robot_remote_server') do |p|
   p.author         = "Daniel Gregoire"
   p.ignore_pattern = ["tmp/*", "script/*"]
   p.runtime_dependencies = ['yard >=0.6.3']
+  p.need_tar_gz = false
 end
