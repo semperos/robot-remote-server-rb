@@ -17,11 +17,20 @@ require 'xmlrpc/server'
 require 'xmlrpc/utils'
 require 'stringio'
 
+# Necessary to parse out documentation and args
+require 'yard'
+
 
 class RobotRemoteServer < XMLRPC::Server
   
-  def initialize(library, host='localhost', port=8270)
+  def initialize(library, host='localhost', port=8270, yardoc_file = '.yardoc')
     @library = library
+    # Get YARD registry loaded into memory
+    @reg = YARD::Registry
+    yardoc_file = "#{File.expand_path(File.dirname(__FILE__))}/../../.yardoc"
+    @reg.load(yardoc_file)
+    @reg.load_all
+    # End yard setup
     super(port, host)  # TODO: Disable logging to stdout
     add_handler('get_keyword_names') { get_keyword_names }
     add_handler('run_keyword') { |name,args| run_keyword(name, args) }
@@ -58,20 +67,27 @@ class RobotRemoteServer < XMLRPC::Server
     # args have default values. It seems that there's no easy way to get that
     # information in Ruby, see e.g. http://www.ruby-forum.com/topic/147614.
     # Additionally, it would be much better to return real argument names 
-    # because that information could be used to create library documentation. 
-    arity = @library.method(name).arity
-    if arity >= 0
-      return ['arg'] * arity
-    else
-      return ['arg'] * (arity.abs - 1) + ['*args']
+    # because that information could be used to create library documentation.
+    parent_class = @library.method(name).owner.to_s
+    codeobj = @reg.resolve(P(parent_class), "#" + name)
+    params = codeobj.parameters
+    params_docs = []
+    params.each do |param|
+      if param[1].nil? # YARD sets the keyword arg to nil if absent
+        params_docs << param[0]
+      else
+        params_docs << param[0] + "=" + param[1]
+      end
     end
+    return params_docs
   end
 
   def get_keyword_documentation(name)  
     # Is there a way to implement this? Would mainly allow creating a library
     # documentation, but if real argument names are not got that's probably
     # not so relevant.
-    ''
+    parent_class = @library.method(name).owner.to_s
+    return @reg.resolve(P(parent_class), "#" + name).docstring
   end
 
   private
