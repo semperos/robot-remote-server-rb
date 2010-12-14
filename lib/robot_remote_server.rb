@@ -27,7 +27,6 @@ class RobotRemoteServer < XMLRPC::Server
     @library = library
     # Get YARD registry loaded into memory
     @reg = YARD::Registry
-    yardoc_file = "#{File.expand_path(File.dirname(__FILE__))}/../../.yardoc"
     @reg.load(yardoc_file)
     @reg.load_all
     # End yard setup
