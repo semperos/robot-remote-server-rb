@@ -7,5 +7,5 @@ Echoe.new('robot_remote_server') do |p|
   p.url            = "http://github.com/semperos/robot-remote-server"
   p.author         = "Daniel Gregoire"
   p.ignore_pattern = ["tmp/*", "script/*"]
-  p.runtime_dependencies = ['yard']
+  p.runtime_dependencies = ['yard >=0.6.3']
 end
