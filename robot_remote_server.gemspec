@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel Gregoire"]
-  s.date = %q{2010-12-14}
+  s.date = %q{2010-12-15}
   s.description = %q{Remote server for Robot Framework in Ruby}
   s.email = %q{}
   s.extra_rdoc_files = ["CHANGELOG", "LICENSE", "README.rdoc", "lib/robot_remote_server.rb"]
