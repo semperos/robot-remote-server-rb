@@ -23,7 +23,7 @@ If you want to hack on the remote server directly and then build your own gem, y
     gem build robot_remote_server
     gem install robot_remote_server-{version}.gem
 
-Or by installing this project's dependencies and using the following rake tasks:
+Or by installing the +echoe+ gem and using the following rake tasks:
 
     rake build
     rake install
@@ -38,16 +38,22 @@ In your test library, you need to include the gem:
 
     require 'robot_remote_server'
 
-Then you'll have the RobotRemoteServer class available to your code. For example, if your test library was defined in a class called <tt>ExampleTestLibrary</tt>, here's how you'd start the <tt>robot_remote_server</tt> server and feed it your test library from IRB:
-
-    require 'robot_remote_server'
-    RobotRemoteServer.new(ExampleTestLibrary.new)
-
-Per the example in Robot Framework itself, you could include that in a file as follows:
+Then you'll have the RobotRemoteServer class available to your code. Per the example in Robot Framework itself, you could include that in a file as follows:
 
     if __FILE__ == $0
+      require 'rubygems'
       require 'robot_remote_server'
-      RobotRemoteServer.new(ExampleTestLibrary.new, *ARGV)
+      require 'example_library'
+      RobotRemoteServer.new(ExampleLibrary.new,
+                              host = 'localhost',
+                              port = 8270,
+                              yardoc_file = '.yardoc'),
+                              yardoc_options = [[:docstring, ''], [:file, 'File'], [:source, 'Source Code']])
     end
 
-Once you have the remote server running with your new test library, you can run your Robot Framework tests and have your test library's keywords available per usual.
+You'll notice a few options are available to you:
+
+host:: The domain name or address at which the server will serve content. If you're unsure, use 'localhost'
+port:: You can optionally change the port on which the server runs. It default to 8270, as those are the ASCII character codes for R and F (Robot Framework)
+yardoc_file:: The file-based cache that yardoc generated when you ran it for your testing library. Without this, the remote library cannot access documentation or method signatures from your remote testing library.
+yardoc_options:: A multi-dimensional array of options, which allow you to tweak which parts of the documentation are printed and in what order. The first element of each child array is a symbol representing a method to which YARD::CodeObject::Base will respond. The second value is an "optional" human-readable label to be printed just before the output of the method. If you don't want a lable, provide an empty string '' as the second value.
