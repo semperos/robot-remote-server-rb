@@ -22,13 +22,21 @@ require 'yard'
 
 
 class RobotRemoteServer < XMLRPC::Server
-  
-  def initialize(library, host='localhost', port=8270, yardoc_file = '.yardoc')
+  #
+  # Constructor for RobotRemoteServer
+  #
+  # @param [Object] library instance of a class in which are defined keywords
+  # @param [String] host the name or location from which this server will serve content
+  # @param [Integer] port the port at which this server will serve content
+  # @param [String] yardoc_file the file which YARD expects when loading its Registry
+  # @param [Hash] yardoc_options a hash of YARD::CodeObject::Base.method => human-readable label for docs
+  def initialize(library, host='localhost', port=8270, yardoc_file = '.yardoc', yardoc_options = {:docstring => ''})
     @library = library
     # Get YARD registry loaded into memory
     @reg = YARD::Registry
     @reg.load(yardoc_file)
     @reg.load_all
+    @reg_options = yardoc_options
     # End yard setup
     super(port, host)  # TODO: Disable logging to stdout
     add_handler('get_keyword_names') { get_keyword_names }
@@ -62,11 +70,6 @@ class RobotRemoteServer < XMLRPC::Server
   end
 
   def get_keyword_arguments(name)
-    # This algorithm doesn't return correct number of maximum arguments when 
-    # args have default values. It seems that there's no easy way to get that
-    # information in Ruby, see e.g. http://www.ruby-forum.com/topic/147614.
-    # Additionally, it would be much better to return real argument names 
-    # because that information could be used to create library documentation.
     parent_class = @library.method(name).owner.to_s
     codeobj = @reg.resolve(P(parent_class), "#" + name)
     params = codeobj.parameters
@@ -82,11 +85,17 @@ class RobotRemoteServer < XMLRPC::Server
   end
 
   def get_keyword_documentation(name)  
-    # Is there a way to implement this? Would mainly allow creating a library
-    # documentation, but if real argument names are not got that's probably
-    # not so relevant.
     parent_class = @library.method(name).owner.to_s
-    return @reg.resolve(P(parent_class), "#" + name).docstring
+    # Allow custom inclusion/exclusion of parts of the documentation
+    # The key is the method, the value is the human-readable label
+    doc = ''
+    @reg_options.each_key do |k|
+      doc << @reg_options[k] + ":\n" if @reg_options[k] != ''
+      doc << @reg.resolve(P(parent_class), "#" + name).send(k)
+      doc << "\n\n"
+    end
+    
+    return doc
   end
 
   private
