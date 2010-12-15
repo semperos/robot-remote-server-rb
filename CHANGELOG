@@ -1,3 +1,5 @@
+v2.5.5.2. Change extra options to multi-dimensional array, to preserve insertion order.
+
 v2.5.5.1. Implement extra options to pass to YARD for generating more flexible documentation for keywords.
 
 v2.5.5. Implement better argument and documentation handling. Require YARD gem.
