@@ -30,7 +30,7 @@ class RobotRemoteServer < XMLRPC::Server
   # @param [Integer] port the port at which this server will serve content
   # @param [String] yardoc_file the file which YARD expects when loading its Registry
   # @param [Hash] yardoc_options a hash of YARD::CodeObject::Base.method => human-readable label for docs
-  def initialize(library, host='localhost', port=8270, yardoc_file = '.yardoc', yardoc_options = {:docstring => ''})
+  def initialize(library, host='localhost', port=8270, yardoc_file = '.yardoc', yardoc_options = [[:docstring, '']])
     @library = library
     # Get YARD registry loaded into memory
     @reg = YARD::Registry
@@ -87,11 +87,11 @@ class RobotRemoteServer < XMLRPC::Server
   def get_keyword_documentation(name)  
     parent_class = @library.method(name).owner.to_s
     # Allow custom inclusion/exclusion of parts of the documentation
-    # The key is the method, the value is the human-readable label
+    # The first element is the method, the second is the human-readable label
     doc = ''
-    @reg_options.each_key do |k|
-      doc << @reg_options[k] + ":\n" if @reg_options[k] != ''
-      doc << @reg.resolve(P(parent_class), "#" + name).send(k)
+    @reg_options.each do |opt|
+      doc << opt[1] + ":\n" if opt[1] != ''
+      doc << @reg.resolve(P(parent_class), "#" + name).send(opt[0])
       doc << "\n\n"
     end
     
