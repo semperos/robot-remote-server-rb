@@ -50,7 +50,7 @@ class RobotRemoteServer < XMLRPC::Server
 
   def get_keyword_names
     # Implicit methods can't be used as keywords
-    @library.methods - Object.new.methods
+    @library.methods - Object.new.methods + [:stop_remote_server]
   end
 
   def run_keyword(name, args)
@@ -58,7 +58,11 @@ class RobotRemoteServer < XMLRPC::Server
     result = {:status=>'PASS', :return=>'', :output=>'',
               :error=>'', :traceback=>''}
     begin
-      return_value = @library.send(name, *args)
+      if name == 'stop_remote_server'
+        shutdown
+      else
+        return_value = @library.send(name, *args)
+      end
       result[:return] = handle_return_value(return_value)
     rescue Exception => exception
       result[:status] = 'FAIL'
