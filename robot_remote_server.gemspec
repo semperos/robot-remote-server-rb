@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{robot_remote_server}
-  s.version = "2.5.5.2"
+  s.version = "2.5.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel Gregoire"]
